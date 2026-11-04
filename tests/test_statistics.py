@@ -139,7 +139,7 @@ def test_file_size(tmp_path):
     paper = calculate_statistics(results, [])
 
     assert paper['total_files'] == 4
-    assert paper['total_size_mb'] == expected_bytes / (1024 ** 2)
+    assert paper['total_size_mib'] == expected_bytes / (1024 ** 2)
 
 
 def test_formats_calculation(tmp_path):

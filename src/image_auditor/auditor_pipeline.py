@@ -12,10 +12,11 @@ def auditor_pipeline(input_path: Path, output_path: Path) -> dict:
     output_path: directory where reports will be saved
     returns: audit results as dict
     """
-    output_path.mkdir(parents=True, exist_ok=True)
 
     # Audit dataset
     results = audit_dataset(input_path)
+
+    output_path.mkdir(parents=True, exist_ok=True)
 
     # Find duplicates
     duplicates = find_duplicates(results)

@@ -38,13 +38,17 @@ def save_json_report(report: dict, output_path: Path) -> None:
 
 
 def save_csv_report(report: dict, output_path: Path) -> None:
-    # TODO: add check for empty report dict, and still write headers
-
-    if not report['files']:
-        report['files'].append({k: None for k in ['file_name', 'file_path', 'format', 'width', 'height', 'is_valid', 'error']})
+    fieldnames = [
+        'file_name',
+        'file_path',
+        'format',
+        'width',
+        'height',
+        'is_valid',
+        'error'
+    ]
     
     with open(output_path, 'w', encoding='utf-8', newline='') as f:
-        writer = csv.DictWriter(f, fieldnames=report['files'][0].keys())
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        for row in report['files']:
-            writer.writerow(row)
+        writer.writerows(report['files'])

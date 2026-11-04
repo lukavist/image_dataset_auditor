@@ -29,16 +29,28 @@ def inspect_image(file_path: Path) -> ImageInspectionResult:
             image_height = img.height
             image_width = img.width
 
-        if image_format is not None and image_height is not None and image_width is not None:
+        if (image_format is None
+            or image_height is None
+            or image_width is None):
             return ImageInspectionResult(
                 file_path=file_path,
                 file_name=file_name,
-                is_valid=True,
-                error=None,
-                image_format=image_format,
-                height=image_height,
-                width=image_width
+                is_valid=False,
+                error="Failed to retrieve image metadata",
+                image_format=None,
+                height=None,
+                width=None
             )
+        return ImageInspectionResult(
+            file_path=file_path,
+            file_name=file_name,
+            is_valid=True,
+            error=None,
+            image_format=image_format,
+            height=image_height,
+            width=image_width
+        )
+    
     except OSError as e:
         return ImageInspectionResult(
             file_path=file_path,

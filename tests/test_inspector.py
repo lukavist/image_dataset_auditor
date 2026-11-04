@@ -1,4 +1,4 @@
-from src.image_auditor.inspector import inspect_image
+from image_auditor.inspector import inspect_image
 from PIL import Image
 import pytest
 

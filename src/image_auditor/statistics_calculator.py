@@ -9,7 +9,9 @@ def calculate_statistics(results: list[ImageInspectionResult], duplicates: list[
     valid_images = 0
     invalid_images = 0
     file_size_in_bytes = 0
+
     formats: dict[str, int] = {}
+
     duplicate_groups = len(duplicates)
     duplicate_files = sum(len(group) for group in duplicates) 
 
@@ -26,13 +28,13 @@ def calculate_statistics(results: list[ImageInspectionResult], duplicates: list[
 
 
         
-    total_size_mb = file_size_in_bytes / (1024 ** 2)
+    total_size_mib = file_size_in_bytes / (1024 ** 2)
 
     return {
         'total_files': total_files,
         'valid_images': valid_images,
         'invalid_images': invalid_images,
-        'total_size_mb': total_size_mb,
+        'total_size_mb': total_size_mib,
         'formats': formats,
         'duplicate_groups': duplicate_groups,
         'duplicate_files': duplicate_files

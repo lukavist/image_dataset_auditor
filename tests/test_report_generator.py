@@ -1,7 +1,8 @@
+import csv
 import json
 from PIL import Image   
 from image_auditor.models import ImageInspectionResult
-from image_auditor.report_generator import generate_report, save_json_report
+from image_auditor.report_generator import generate_report, save_json_report, save_csv_report
 from image_auditor.statistics_calculator import calculate_statistics
 
 
@@ -107,3 +108,49 @@ def test_json_report(tmp_path):
 
     assert report_path.exists()
     assert loaded == report
+
+
+def test_csv_report(tmp_path):
+    img_path = tmp_path / 'image.png'
+    Image.new('RGB', (20, 30)).save(img_path)
+    bad_path = tmp_path / 'broken.txt'
+    bad_path.write_text('not an image')
+
+    results = [
+        ImageInspectionResult(img_path, img_path.name, 'PNG', 20, 30, True, None),
+        ImageInspectionResult(bad_path, bad_path.name, None, None, None, False, 'Invalid Image'),
+    ]
+    statistics = calculate_statistics(results, [])
+    report = generate_report(results, [], statistics)
+
+    report_path = tmp_path / 'report.csv'
+    save_csv_report(report, report_path)
+
+    assert report_path.exists()
+
+    with open(report_path, encoding='utf-8', newline='') as f:
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        header = reader.fieldnames
+
+    assert header == ['file_name', 'file_path', 'format', 'width', 'height', 'is_valid', 'error']
+    assert len(rows) == 2
+
+    assert rows[0] == {
+        'file_name': 'image.png',
+        'file_path': str(img_path),
+        'format': 'PNG',
+        'width': '20',
+        'height': '30',
+        'is_valid': 'True',
+        'error': ''
+    }
+    assert rows[1] == {
+        'file_name': 'broken.txt',
+        'file_path': str(bad_path),
+        'format': '',
+        'width': '',
+        'height': '',
+        'is_valid': 'False',
+        'error': 'Invalid Image'
+    }

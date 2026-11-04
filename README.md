@@ -19,7 +19,7 @@ Image Dataset Auditor scans image directories, checks image validity, extracts m
 1. Clone the repository:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/lukavist/image_dataset_auditor.git
    cd image_dataset_auditor
    ```
 
@@ -44,7 +44,7 @@ Image Dataset Auditor scans image directories, checks image validity, extracts m
 4. Install the package:
 
    ```python
-   python -m pip install -e .
+   python -m pip install -e ".[dev]"
    ```
 
 ## Usage
@@ -81,6 +81,60 @@ The JSON report contains three main sections:
 - `summary` — overall dataset statistics.
 - `files` — metadata and validation results for each scanned file.
 - `duplicates` — groups of byte-identical files.
+
+Example `report.json` (trimmed):
+
+```json
+{
+  "summary": {
+    "total_files": 24,
+    "valid_images": 18,
+    "invalid_images": 6,
+    "total_size_mb": 0.010448455810546875,
+    "formats": {
+      "PNG": 9,
+      "JPEG": 9
+    },
+    "duplicate_groups": 6,
+    "duplicate_files": 12
+  },
+  "files": [
+    {
+      "file_name": "broken_0.png",
+      "file_path": "test_dataset\\broken_0.png",
+      "format": null,
+      "width": null,
+      "height": null,
+      "is_valid": false,
+      "error": "Truncated File Read"
+    },
+    {
+      "file_name": "image_00.png",
+      "file_path": "test_dataset\\image_00.png",
+      "format": "PNG",
+      "width": 78,
+      "height": 56,
+      "is_valid": true,
+      "error": null
+    }
+  ],
+  "duplicates": [
+    [
+      "test_dataset\\copy_of_image_00.png",
+      "test_dataset\\image_00.png"
+    ]
+  ]
+}
+```
+
+Example `report.csv` (trimmed):
+
+```csv
+file_name,file_path,format,width,height,is_valid,error
+broken_0.png,test_dataset\broken_0.png,,,,False,Truncated File Read
+copy_of_image_00.png,test_dataset\copy_of_image_00.png,PNG,78,56,True,
+copy_of_image_01.jpg,test_dataset\copy_of_image_01.jpg,JPEG,112,107,True,
+```
 
 Example terminal output:
 
@@ -122,8 +176,6 @@ image_dataset_auditor/
 
 ## Future Improvements
 
-## Future Improvements
-
 The following features are planned for future releases:
 
 - **Perceptual duplicate detection** — implement perceptual hashing to identify visually similar images, including resized, compressed, or slightly modified versions of the same image.
@@ -139,3 +191,5 @@ The following features are planned for future releases:
 - **Cloud storage support** — extend dataset scanning to support remote storage services such as Amazon S3 and other S3-compatible storage providers.
 
 - **Historical audit comparison** — store previous audit results and compare them over time to track dataset changes, detect newly introduced issues, and monitor data quality.
+
+## 

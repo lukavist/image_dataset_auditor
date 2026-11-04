@@ -1,6 +1,6 @@
 import pytest
 from PIL import Image
-from src.image_auditor.auditor import audit_dataset
+from image_auditor.auditor import audit_dataset
 
 
 def test_valid_directory(tmp_path):

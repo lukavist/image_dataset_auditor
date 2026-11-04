@@ -13,8 +13,7 @@ def main() -> None:
     try:
         report = auditor_pipeline(input_path, output_path)
     except (FileNotFoundError, NotADirectoryError) as e:
-        print(f"Error: {e}")
-        return 
+        parser.error(str(e))
     
     print(f"Total_files: {report['summary'].get('total_files')}")
 
