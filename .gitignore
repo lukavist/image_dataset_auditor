@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Test and tooling caches
+.pytest_cache/
+.vscode/
+
+# Generated output and sample data
+output/
+reports/
+test_dataset/
+random_images/
+empty_folder/
